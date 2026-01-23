@@ -8,9 +8,9 @@ def preprocess_image(img, output_size=(64, 64)):
     return resized
 
 
-
-img = cv2.imread(r"dataset\with_mask\with_mask_1.jpg")
-processed = preprocess_image(img)
+if __name__ == "__main__":
+    img = cv2.imread(r"dataset\with_mask\with_mask_1.jpg")
+    processed = preprocess_image(img)
 
 #cv2.imshow("Processed Face Image", processed)
 #cv2.waitKey(0)

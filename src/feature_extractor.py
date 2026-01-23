@@ -1,6 +1,6 @@
 import numpy as np
-from preprocess import preprocess_image
-from cnn_layers import conv2d, relu, maxpool, flatten
+from src.preprocess import preprocess_image
+from src.cnn_layers import conv2d, relu, maxpool, flatten
 
 
 KERNELS = [
@@ -28,9 +28,10 @@ def extract_features(img):
     features = flatten(feature_maps)
     return features
 
+if __name__ == "__main__":
 
-import cv2
+    import cv2
 
-img = cv2.imread("dataset/with_mask/with_mask_1.jpg")
-feats = extract_features(img)
-print("Feature vector length:", feats.shape[0])
+    img = cv2.imread("dataset/with_mask/with_mask_1.jpg")
+    feats = extract_features(img)
+    print("Feature vector length:", feats.shape[0])

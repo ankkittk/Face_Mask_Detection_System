@@ -46,10 +46,11 @@ kernel = np.array([ [1, 0, -1],
                     [1, 0, -1],
                     [1, 0, -1] ])
 
-conv = conv2d(img, kernel)
-act = relu(conv)
-pool = maxpool(act)
+if __name__ == "__main__":
+    conv = conv2d(img, kernel)
+    act = relu(conv)
+    pool = maxpool(act)
 
-print("Conv shape:", conv.shape)
-print("Pool shape:", pool.shape)
-print("Flatten length:", flatten(pool).shape)
+    print("Conv shape:", conv.shape)
+    print("Pool shape:", pool.shape)
+    print("Flatten length:", flatten(pool).shape)
