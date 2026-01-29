@@ -208,3 +208,4 @@ __marimo__/
 
 # Model
 svm_model.pkl
+models/svm_model.pkl

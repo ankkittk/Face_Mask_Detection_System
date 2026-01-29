@@ -2,6 +2,11 @@ import os
 import cv2
 import numpy as np
 import joblib
+import sys
+
+sys.path.append(os.path.abspath("."))
+
+
 from sklearn.svm import SVC
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import Pipeline
@@ -17,12 +22,20 @@ CATEGORIES = {
 MODEL_DIR = "models"
 MODEL_PATH = os.path.join(MODEL_DIR, "svm_model.pkl")
 
+# SVM configuration finalized from experimentation
+SVM_KERNEL = "rbf"
+SVM_C = 1.0
+SVM_GAMMA = "scale"
+
 
 def load_dataset():
     X, y = [], []
 
     for category, label in CATEGORIES.items():
         folder = os.path.join(DATASET_DIR, category)
+
+        if not os.path.exists(folder):
+            raise FileNotFoundError(f"Dataset folder not found: {folder}")
 
         for fname in os.listdir(folder):
             img_path = os.path.join(folder, fname)
@@ -39,24 +52,28 @@ def load_dataset():
 
 
 def train_svm():
-    print("[INFO] Loading dataset and extracting features...")
+    print("[INFO] Loading dataset and extracting CNN features...")
     X, y = load_dataset()
 
-    print(f"[INFO] Total samples: {len(X)}")
-    print(f"[INFO] Feature vector length: {X.shape[1]}")
+    print(f"[INFO] Total samples       : {len(X)}")
+    print(f"[INFO] Feature dimension  : {X.shape[1]}")
 
-    svm_pipeline = Pipeline([
+    model = Pipeline([
         ("scaler", StandardScaler()),
-        ("svm", SVC(kernel="rbf", C=1.0, gamma="scale"))
+        ("svm", SVC(
+            kernel=SVM_KERNEL,
+            C=SVM_C,
+            gamma=SVM_GAMMA
+        ))
     ])
 
-    print("[INFO] Training SVM...")
-    svm_pipeline.fit(X, y)
+    print("[INFO] Training SVM classifier...")
+    model.fit(X, y)
 
     os.makedirs(MODEL_DIR, exist_ok=True)
-    joblib.dump(svm_pipeline, MODEL_PATH)
+    joblib.dump(model, MODEL_PATH)
 
-    print(f"[INFO] Model saved at: {MODEL_PATH}")
+    print(f"[INFO] Trained model saved to: {MODEL_PATH}")
 
 
 if __name__ == "__main__":
